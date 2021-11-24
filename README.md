@@ -1,6 +1,6 @@
 # Not Fast Enough
 This project is developed by [enisfr](https://github.com/enisfr)   
-It is used for testing download speed for your internet connection.  
+It is a nodejs API and used for testing download speed for your internet connection.  
 All tests are stored in the mongodb and past tests can also be retrieved.
 
 Speed testing is established via [fast-speedtest-api](https://github.com/branchard/fast-speedtest-api)
