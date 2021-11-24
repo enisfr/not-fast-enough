@@ -16,5 +16,7 @@
 		"sourceType": "module"
 	},
 	"rules": {
+		"indent": "off",
+		"newline-after-import": "off"
 	}
 }

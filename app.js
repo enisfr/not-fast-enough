@@ -1,32 +1,24 @@
 const express = require('express');
-const FastSpeedTest = require('fast-speedtest-api');
-const env = require('dotenv').config();
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const speedTestRoutes = require('./routes/speed-test');
 
 const app = express();
 
-
-
-app.get('/', (req, res, next) => {
-	getSpeed().then(() => res.send('running'));
+app.use(bodyParser.json());
+app.get('/', speedTestRoutes);
+app.use((error, req, res, next) => {
+  res.status(error.statusCode || 500).json({
+    message: error.message,
+    data: error.data,
+  });
 });
 
-let fastSpeedTest = new FastSpeedTest({
-	token: process.env.API_KEY,
-	verbose: false,
-	timeout: 10000,
-	https: true,
-	urlCount: 5,
-	bufferSize: 8,
-	unit: FastSpeedTest.UNITS.Mbps
-});
-
-async function getSpeed() {
-	await fastSpeedTest.getSpeed().then(speed => {
-		console.log(`Speed: ${speed} Mbps`);
-		return speed;
-	}).catch(e => {
-		console.error(e.message);
-	});
-}
-
-app.listen(3000);
+mongoose
+  .connect(process.env.MONGODB_CONNECTION_STRING)
+  .then(() => {
+    app.listen(process.env.SERVER_PORT);
+  })
+  .catch((err) => console.log(err));
